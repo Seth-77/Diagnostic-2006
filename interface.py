@@ -8,7 +8,7 @@ MENU_FONT = ("Calibri", 13)
 
 entry_nom = entry_prenom = entry_age = entry_sex = None
 symptome1 = symptome2 = symptome3 = None
-entry_login = entry_password = admin_win = None
+entry_login = entry_password = admin_win = diag_win = None
 
 def build_app() -> tk.Window:
     """
@@ -20,13 +20,14 @@ def build_app() -> tk.Window:
     root = tk.Window(
         title="Diagnostic 2006",
         themename="vapor",
-        size=(500, 375)
+        size=(500, 385)
     )
     build_welcome_message(root)
     build_name_surname(root)
     build_age_sex(root)
     build_symptoms(root)
     build_send(root)
+    build_consent_message(root)
     build_admin_button(root)
     root.position_center()
     return root
@@ -176,12 +177,25 @@ def build_admin_button(parent):
     admin_button = tk.Button(frame, text="Admin 🔒", bootstyle="dark", command=open_admin_win)
     admin_button.pack(side="bottom", anchor="e", padx=5, pady=5)
 
+def build_consent_message(parent):
+    """
+    Crée et affiche un message de consentement.
+    """
+    frame = tk.Frame(parent)
+    frame.pack()
+
+    lbl = tk.Label(frame,text="En cliquant sur Envoyer, vous acceptez la collecte de donnée")
+    lbl.pack()
 
 def open_admin_win():
     """
     Ouvre la fenêtre administrateur pour l'accès au CSV déchiffré.
     """
     global entry_login,entry_password,admin_win
+    if admin_win is not None and admin_win.winfo_exists():
+        admin_win.lift() 
+        return
+
     admin_win = tk.Toplevel()
     admin_win.protocol("WM_DELETE_WINDOW", lambda: (delete_temp_file(), admin_win.destroy()))
     admin_win.title("Admin panel")
@@ -288,6 +302,10 @@ def show_diagnostic(maladie):
 
     :param maladie: Nom de la maladie détectée
     """
+    global diag_win
+    if diag_win is not None and diag_win.winfo_exists():
+        diag_win.lift()
+        return
     diag_win = tk.Toplevel(size=(500, 350))
     diag_win.title("Diagnostic")
     diag_win.resizable(False, False)
