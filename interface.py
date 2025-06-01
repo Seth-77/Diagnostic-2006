@@ -1,6 +1,6 @@
 import ttkbootstrap as tk
 from tkinter import messagebox
-from logic import (determiner_maladie,save_to_csv,crypter_csv,charger_cle,supprimer_fichier_temporaire,decrypter_csv,load_options_from_file,resource_path)
+from logic import (determiner_maladie,save_to_csv,crypter_csv,charger_cle,supprimer_fichier_temporaire,decrypter_csv,load_options_from_file,resource_path,generate_key)
 import os
 
 LBL_FONT = ("Cambria", 16)
@@ -221,6 +221,7 @@ def send_info():
     maladie = determiner_maladie([s1, s2, s3])
     data = [nom, prenom, age, sexe, s1, s2, s3, maladie]
     save_to_csv(data)
+    generate_key()
     cle = charger_cle()
     crypter_csv("Patients_info.csv", "Patients_info_crypte.csv", cle)
     show_diagnostic(maladie)

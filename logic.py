@@ -55,7 +55,14 @@ def decrypter_csv(fichier_crypte, fichier_decrypte, cle):
 def charger_cle():
     with open(resource_path("key.key"), "rb") as f:
         return f.read()
-
+    
+def generate_key(filepath="key.key"):
+    if os.path.exists(resource_path(filepath)):
+        return
+    key = Fernet.generate_key()
+    with open(resource_path(filepath), "wb") as key_file:
+        key_file.write(key)
+        
 def supprimer_fichier_temporaire():
     try:
         if os.path.exists("Patients_info_decrypte.csv"):
