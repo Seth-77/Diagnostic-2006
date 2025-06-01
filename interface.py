@@ -16,11 +16,13 @@ def build_app() -> tk.Window:
     
     :return: Fenêtre Tkinter principale
     """
+    global root
     root = tk.Window(
         title="Diagnostic 2006",
         themename="vapor",
-        size=(500, 350)
+        size=(500, 375)
     )
+    build_welcome_message(root)
     build_name_surname(root)
     build_age_sex(root)
     build_symptoms(root)
@@ -29,6 +31,11 @@ def build_app() -> tk.Window:
     root.position_center()
     return root
 
+def build_welcome_message(parent):
+    frame = tk.Frame(parent)
+    frame.pack(pady=10, fill='x')
+    lbl_message = tk.Label(frame, text="Veuillez remplir vos coordonnées et choisir trois symptômes",font=("Calibri", 12),justify="center",wraplength=400)
+    lbl_message.pack()
 
 def build_name_surname(parent):
     """
@@ -137,8 +144,11 @@ def build_send(parent):
     send_button = tk.Button(frame, bootstyle="success", text="Envoyer", width=15, command=send_info)
     send_button.grid(row=0, column=0, padx=10)
 
-    cancel_button = tk.Button(frame, bootstyle="warning", text="Annuler", width=15, command=clear_fields)
+    cancel_button = tk.Button(frame, bootstyle="warning", text="Réinitialiser", width=15, command=clear_fields)
     cancel_button.grid(row=0, column=1, padx=10)
+
+    close_button = tk.Button(frame, bootstyle="danger", text="Fermer", width=15, command=root.quit)
+    close_button.grid(row=0, column=2, padx=10)
 
 
 def clear_fields():
