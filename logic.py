@@ -3,6 +3,7 @@ import csv
 from datetime import datetime
 from cryptography.fernet import Fernet
 import sys
+from tkinter import messagebox
 
 def determine_disease(symptomes):
     symptomes_set = set(symptomes)
@@ -57,11 +58,14 @@ def load_key():
         return f.read()
     
 def generate_key(filepath="key.key"):
-    if os.path.exists(resource_path(filepath)):
-        return
-    key = Fernet.generate_key()
-    with open(resource_path(filepath), "wb") as key_file:
-        key_file.write(key)
+    try:
+        if os.path.exists(resource_path(filepath)):
+            return
+        key = Fernet.generate_key()
+        with open(resource_path(filepath), "wb") as key_file:
+            key_file.write(key)
+    except Exception as e:
+        print(f"Erreur lors de la génération de la clé : {e}")
         
 def delete_temp_file():
     try:
@@ -72,7 +76,6 @@ def delete_temp_file():
 
 
 def resource_path(relative_path):
-
     try:
         base_path = sys._MEIPASS 
     except AttributeError:
@@ -80,6 +83,13 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def load_options_from_file(filepath):
-    path = resource_path(filepath)
-    with open(path, 'r', encoding='utf-8') as file:
-        return [line.strip() for line in file if line.strip()]
+    try:
+        path = resource_path(filepath)
+        with open(path, 'r', encoding='utf-8') as file:
+            return [line.strip() for line in file if line.strip()]
+    except FileNotFoundError:
+        messagebox.showerror("Erreur", f"Le fichier {filepath} est introuvable.")
+        return []
+    except Exception as e:
+        messagebox.showerror("Erreur", f"Impossible de lire {filepath}.\n{e}")
+        return []
