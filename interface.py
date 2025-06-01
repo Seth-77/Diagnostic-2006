@@ -11,6 +11,11 @@ symptome1 = symptome2 = symptome3 = None
 entry_login = entry_password = admin_win = None
 
 def build_app() -> tk.Window:
+    """
+    Crée et configure la fenêtre principale de l'application.
+    
+    :return: Fenêtre Tkinter principale
+    """
     root = tk.Window(
         title="Diagnostic 2006",
         themename="vapor",
@@ -26,6 +31,11 @@ def build_app() -> tk.Window:
 
 
 def build_name_surname(parent):
+    """
+    Construit la section nom et prénom de l'interface.
+
+    :param parent: Conteneur parent (fenêtre principale)
+    """
     global entry_nom, entry_prenom
     frame = tk.Frame(parent)
     frame.pack(pady=10, fill='x')
@@ -45,6 +55,11 @@ def build_name_surname(parent):
 
 
 def build_age_sex(parent):
+    """
+    Construit la section âge et sexe de l'interface.
+
+    :param parent: Conteneur parent (fenêtre principale)
+    """
     global entry_age, entry_sex
     frame = tk.Frame(parent)
     frame.pack(pady=10, fill='x')
@@ -64,6 +79,11 @@ def build_age_sex(parent):
 
 
 def build_symptoms(parent):
+    """
+    Construit la section des symptômes avec comboboxes dépendantes.
+
+    :param parent: Conteneur parent (fenêtre principale)
+    """
     global symptome1, symptome2, symptome3, all_symptoms
 
     frame = tk.Frame(parent)
@@ -106,6 +126,11 @@ def build_symptoms(parent):
 
 
 def build_send(parent):
+    """
+    Crée les boutons Envoyer et Annuler.
+
+    :param parent: Conteneur parent (fenêtre principale)
+    """
     frame = tk.Frame(parent)
     frame.pack(pady=10)
 
@@ -117,6 +142,9 @@ def build_send(parent):
 
 
 def clear_fields():
+    """
+    Efface les champs du formulaire utilisateur.
+    """
     entry_nom.delete(0, tk.END)
     entry_prenom.delete(0, tk.END)
     entry_age.delete(0, tk.END)
@@ -127,6 +155,11 @@ def clear_fields():
 
 
 def build_admin_button(parent):
+    """
+    Crée le bouton d’accès à l’interface administrateur.
+
+    :param parent: Conteneur parent (fenêtre principale)
+    """
     frame = tk.Frame(parent)
     frame.pack(fill='both', expand=True)
 
@@ -135,6 +168,9 @@ def build_admin_button(parent):
 
 
 def open_admin_win():
+    """
+    Ouvre la fenêtre administrateur pour l'accès au CSV déchiffré.
+    """
     global entry_login,entry_password,admin_win
     admin_win = tk.Toplevel()
     admin_win.protocol("WM_DELETE_WINDOW", lambda: (delete_temp_file(), admin_win.destroy()))
@@ -166,10 +202,16 @@ def open_admin_win():
     btn_fermer.grid(row=3, column=1,pady=5,padx=5)
 
 def two_actions():
+    """
+    Ferme la fenêtre admin et supprime le fichier temporaire.
+    """
     admin_win.destroy()
     delete_temp_file()
 
 def check_user():
+    """
+    Vérifie les identifiants de l'admin et ouvre le fichier CSV déchiffré.
+    """
     username = entry_login.get().strip()
     password = entry_password.get().strip()
 
@@ -185,6 +227,9 @@ def check_user():
 
 
 def send_info():
+    """
+    Récupère les infos du formulaire, diagnostique, enregistre, chiffre et affiche.
+    """
     nom = entry_nom.get().strip()
     prenom = entry_prenom.get().strip()
     age = entry_age.get().strip()
@@ -228,6 +273,11 @@ def send_info():
 
 
 def show_diagnostic(maladie):
+    """
+    Affiche une fenêtre avec le diagnostic et le médicament proposé.
+
+    :param maladie: Nom de la maladie détectée
+    """
     diag_win = tk.Toplevel(size=(500, 350))
     diag_win.title("Diagnostic")
     diag_win.resizable(False, False)

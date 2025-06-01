@@ -6,6 +6,12 @@ import sys
 from tkinter import messagebox
 
 def determine_disease(symptomes):
+    """
+    Détermine la maladie à partir d'une liste de symptômes.
+    
+    :param symptomes: Liste de symptômes (strings)
+    :return: Nom de la maladie si reconnue, sinon message d'erreur
+    """
     symptomes_set = set(symptomes)
 
     maladies_connues = {}
@@ -23,6 +29,11 @@ def determine_disease(symptomes):
     return "Maladie inconnue - Veuillez vérifier vos symptômes"
 
 def save_to_csv(data):
+    """
+    Sauvegarde les données du patient dans un fichier CSV.
+
+    :param data: Liste contenant les données du patient
+    """
     filename = "Patients_info.csv"
     file_exists = os.path.isfile(filename)
     now = datetime.now()
@@ -38,6 +49,13 @@ def save_to_csv(data):
         ctypes.windll.kernel32.SetFileAttributesW(filename, 2)
 
 def crypter_csv(fichier_source, fichier_crypte, cle):
+    """
+    Crypte un fichier CSV avec une clé donnée.
+
+    :param fichier_source: Chemin du fichier source
+    :param fichier_crypte: Chemin du fichier de sortie chiffré
+    :param cle: Clé de chiffrement (bytes)
+    """
     fernet = Fernet(cle)
     with open(fichier_source, 'rb') as f:
         donnees = f.read()
@@ -46,6 +64,13 @@ def crypter_csv(fichier_source, fichier_crypte, cle):
         f.write(donnees_cryptees)
 
 def decrypter_csv(fichier_crypte, fichier_decrypte, cle):
+    """
+    Décrypte un fichier CSV à l'aide de la clé fournie.
+
+    :param fichier_crypte: Fichier chiffré à lire
+    :param fichier_decrypte: Fichier de sortie déchiffré
+    :param cle: Clé de chiffrement (bytes)
+    """
     fernet = Fernet(cle)
     with open(fichier_crypte, 'rb') as f:
         donnees_cryptees = f.read()
@@ -54,10 +79,20 @@ def decrypter_csv(fichier_crypte, fichier_decrypte, cle):
         f.write(donnees)
 
 def load_key():
+    """
+    Charge une clé de chiffrement depuis le fichier key.key.
+
+    :return: Clé de chiffrement (bytes)
+    """
     with open(resource_path("key.key"), "rb") as f:
         return f.read()
     
 def generate_key(filepath="key.key"):
+    """
+    Génère une nouvelle clé de chiffrement si elle n'existe pas déjà.
+
+    :param filepath: Chemin du fichier clé
+    """
     try:
         if os.path.exists(resource_path(filepath)):
             return
@@ -68,6 +103,9 @@ def generate_key(filepath="key.key"):
         print(f"Erreur lors de la génération de la clé : {e}")
         
 def delete_temp_file():
+    """
+    Supprime le fichier CSV déchiffré temporaire s'il existe.
+    """
     try:
         if os.path.exists("Patients_info_decrypte.csv"):
             os.remove("Patients_info_decrypte.csv")
@@ -76,6 +114,12 @@ def delete_temp_file():
 
 
 def resource_path(relative_path):
+    """
+    Retourne le chemin absolu vers une ressource embarquée ou locale.
+
+    :param relative_path: Chemin relatif du fichier
+    :return: Chemin absolu vers la ressource
+    """
     try:
         base_path = sys._MEIPASS 
     except AttributeError:
@@ -83,6 +127,12 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def load_options_from_file(filepath):
+    """
+    Charge une liste de chaînes à partir d’un fichier texte, une par ligne.
+
+    :param filepath: Nom du fichier
+    :return: Liste des options (chaînes)
+    """
     try:
         path = resource_path(filepath)
         with open(path, 'r', encoding='utf-8') as file:
