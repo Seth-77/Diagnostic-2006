@@ -1,0 +1,10 @@
+[project]
+name = "diagnostic-2006"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cryptography>=45.0.3",
+    "ttkbootstrap>=1.13.8",
+]

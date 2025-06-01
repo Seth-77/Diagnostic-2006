@@ -1,0 +1,21 @@
+Fievre
+Toux
+Fatigue
+Maux de tete
+Nausee
+Vertiges
+Eruptions cutanées
+Demangeaisons
+Rougeurs
+Essoufflement
+Douleur thoracique
+Douleurs abdominales
+Courbatures
+Frissons
+Diarrhee
+Vomissements
+Perte d'appetit
+Nez qui coule
+Maux de gorge
+Yeux rouges
+Douleurs articulaires
