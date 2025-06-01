@@ -1,6 +1,6 @@
 import ttkbootstrap as tk
 from tkinter import messagebox
-from logic import (determiner_maladie,save_to_csv,crypter_csv,charger_cle,supprimer_fichier_temporaire,decrypter_csv,load_options_from_file,resource_path,generate_key)
+from logic import (determine_disease,save_to_csv,crypter_csv,load_key,delete_temp_file,decrypter_csv,load_options_from_file,resource_path,generate_key)
 import os
 
 LBL_FONT = ("Cambria", 16)
@@ -137,7 +137,7 @@ def build_admin_button(parent):
 def open_admin_win():
     global entry_login,entry_password,admin_win
     admin_win = tk.Toplevel()
-    admin_win.protocol("WM_DELETE_WINDOW", lambda: (supprimer_fichier_temporaire(), admin_win.destroy()))
+    admin_win.protocol("WM_DELETE_WINDOW", lambda: (delete_temp_file(), admin_win.destroy()))
     admin_win.title("Admin panel")
     admin_win.resizable(False, False)
     admin_win.attributes("-topmost", True)
@@ -167,7 +167,7 @@ def open_admin_win():
 
 def two_actions():
     admin_win.destroy()
-    supprimer_fichier_temporaire()
+    delete_temp_file()
 
 def check_user():
     username = entry_login.get().strip()
@@ -175,7 +175,7 @@ def check_user():
 
     if username == "admin" and password == "1234":
         try:
-            cle = charger_cle()
+            cle = load_key()
             decrypter_csv("Patients_info_crypte.csv", "Patients_info_decrypte.csv", cle)
             os.startfile("Patients_info_decrypte.csv")
         except Exception as e:
@@ -218,11 +218,11 @@ def send_info():
         messagebox.showerror("Erreur", "Veuillez sélectionner au moins un symptôme.")
         return
 
-    maladie = determiner_maladie([s1, s2, s3])
+    maladie = determine_disease([s1, s2, s3])
     data = [nom, prenom, age, sexe, s1, s2, s3, maladie]
     save_to_csv(data)
     generate_key()
-    cle = charger_cle()
+    cle = load_key()
     crypter_csv("Patients_info.csv", "Patients_info_crypte.csv", cle)
     show_diagnostic(maladie)
 

@@ -4,7 +4,7 @@ from datetime import datetime
 from cryptography.fernet import Fernet
 import sys
 
-def determiner_maladie(symptomes):
+def determine_disease(symptomes):
     symptomes_set = set(symptomes)
 
     maladies_connues = {}
@@ -52,7 +52,7 @@ def decrypter_csv(fichier_crypte, fichier_decrypte, cle):
     with open(fichier_decrypte, 'wb') as f:
         f.write(donnees)
 
-def charger_cle():
+def load_key():
     with open(resource_path("key.key"), "rb") as f:
         return f.read()
     
@@ -63,7 +63,7 @@ def generate_key(filepath="key.key"):
     with open(resource_path(filepath), "wb") as key_file:
         key_file.write(key)
         
-def supprimer_fichier_temporaire():
+def delete_temp_file():
     try:
         if os.path.exists("Patients_info_decrypte.csv"):
             os.remove("Patients_info_decrypte.csv")
