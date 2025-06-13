@@ -1,6 +1,16 @@
 import ttkbootstrap as tk
 from tkinter import messagebox
-from logic import (determine_disease,save_to_csv,crypter_csv,load_key,delete_temp_file,decrypter_csv,load_options_from_file,resource_path,generate_key)
+from logic import (
+    determine_disease,
+    save_to_csv,
+    crypter_csv,
+    load_key,
+    delete_temp_file,
+    decrypter_csv,
+    load_options_from_file,
+    resource_path,
+    generate_key,
+)
 import os
 
 LBL_FONT = ("Cambria", 16)
@@ -10,18 +20,15 @@ entry_nom = entry_prenom = entry_age = entry_sex = None
 symptome1 = symptome2 = symptome3 = None
 entry_login = entry_password = admin_win = diag_win = None
 
+
 def build_app() -> tk.Window:
     """
     Crée et configure la fenêtre principale de l'application.
-    
+
     :return: Fenêtre Tkinter principale
     """
     global root
-    root = tk.Window(
-        title="Diagnostic 2006",
-        themename="vapor",
-        size=(500, 385)
-    )
+    root = tk.Window(title="Diagnostic 2006", themename="vapor", size=(500, 385))
     build_welcome_message(root)
     build_name_surname(root)
     build_age_sex(root)
@@ -32,11 +39,19 @@ def build_app() -> tk.Window:
     root.position_center()
     return root
 
+
 def build_welcome_message(parent):
     frame = tk.Frame(parent)
-    frame.pack(pady=10, fill='x')
-    lbl_message = tk.Label(frame, text="Veuillez remplir vos coordonnées et choisir trois symptômes",font=("Calibri", 12),justify="center",wraplength=400)
+    frame.pack(pady=10, fill="x")
+    lbl_message = tk.Label(
+        frame,
+        text="Veuillez remplir vos coordonnées et choisir trois symptômes",
+        font=("Calibri", 12),
+        justify="center",
+        wraplength=400,
+    )
     lbl_message.pack()
+
 
 def build_name_surname(parent):
     """
@@ -46,7 +61,7 @@ def build_name_surname(parent):
     """
     global entry_nom, entry_prenom
     frame = tk.Frame(parent)
-    frame.pack(pady=10, fill='x')
+    frame.pack(pady=10, fill="x")
 
     lblnom = tk.Label(frame, text="Nom")
     lblnom.grid(row=0, column=0, sticky="w", padx=5)
@@ -70,7 +85,7 @@ def build_age_sex(parent):
     """
     global entry_age, entry_sex
     frame = tk.Frame(parent)
-    frame.pack(pady=10, fill='x')
+    frame.pack(pady=10, fill="x")
 
     lblage = tk.Label(frame, text="Âge")
     lblage.grid(row=0, column=0, sticky="w", padx=5)
@@ -79,7 +94,9 @@ def build_age_sex(parent):
 
     lblsex = tk.Label(frame, text="Sexe")
     lblsex.grid(row=0, column=2, sticky="w", padx=5)
-    entry_sex = tk.Combobox(frame, values=["Homme", "Femme", "Non-Defini"], state="readonly")
+    entry_sex = tk.Combobox(
+        frame, values=["Homme", "Femme", "Non-Defini"], state="readonly"
+    )
     entry_sex.grid(row=0, column=3, sticky="ew", padx=5)
 
     frame.columnconfigure(1, weight=1)
@@ -95,7 +112,7 @@ def build_symptoms(parent):
     global symptome1, symptome2, symptome3, all_symptoms
 
     frame = tk.Frame(parent)
-    frame.pack(pady=10, fill='x')
+    frame.pack(pady=10, fill="x")
 
     all_symptoms = load_options_from_file("symptom.txt")
 
@@ -112,19 +129,19 @@ def build_symptoms(parent):
         symptome2.configure(values=values_2)
         symptome3.configure(values=values_3)
 
-    lbl1 = tk.Label(frame, text="Symptome 1", font=('Calibri', 10, 'bold'))
+    lbl1 = tk.Label(frame, text="Symptome 1", font=("Calibri", 10, "bold"))
     lbl1.grid(row=0, column=0, sticky="w", pady=5, padx=5)
     symptome1 = tk.Combobox(frame, values=all_symptoms, state="readonly")
     symptome1.grid(row=0, column=1, sticky="ew", pady=5, padx=5)
     symptome1.bind("<<ComboboxSelected>>", update_symptoms_options)
 
-    lbl2 = tk.Label(frame, text="Symptome 2", font=('Calibri', 10, 'bold'))
+    lbl2 = tk.Label(frame, text="Symptome 2", font=("Calibri", 10, "bold"))
     lbl2.grid(row=1, column=0, sticky="w", pady=5, padx=5)
     symptome2 = tk.Combobox(frame, values=all_symptoms, state="readonly")
     symptome2.grid(row=1, column=1, sticky="ew", pady=5, padx=5)
     symptome2.bind("<<ComboboxSelected>>", update_symptoms_options)
 
-    lbl3 = tk.Label(frame, text="Symptome 3", font=('Calibri', 10, 'bold'))
+    lbl3 = tk.Label(frame, text="Symptome 3", font=("Calibri", 10, "bold"))
     lbl3.grid(row=2, column=0, sticky="w", pady=5, padx=5)
     symptome3 = tk.Combobox(frame, values=all_symptoms, state="readonly")
     symptome3.grid(row=2, column=1, sticky="ew", pady=5, padx=5)
@@ -142,13 +159,19 @@ def build_send(parent):
     frame = tk.Frame(parent)
     frame.pack(pady=10)
 
-    send_button = tk.Button(frame, bootstyle="success", text="Envoyer", width=15, command=send_info)
+    send_button = tk.Button(
+        frame, bootstyle="success", text="Envoyer", width=15, command=send_info
+    )
     send_button.grid(row=0, column=0, padx=10)
 
-    cancel_button = tk.Button(frame, bootstyle="warning", text="Réinitialiser", width=15, command=clear_fields)
+    cancel_button = tk.Button(
+        frame, bootstyle="warning", text="Réinitialiser", width=15, command=clear_fields
+    )
     cancel_button.grid(row=0, column=1, padx=10)
 
-    close_button = tk.Button(frame, bootstyle="danger", text="Fermer", width=15, command=root.quit)
+    close_button = tk.Button(
+        frame, bootstyle="danger", text="Fermer", width=15, command=root.quit
+    )
     close_button.grid(row=0, column=2, padx=10)
 
 
@@ -159,10 +182,10 @@ def clear_fields():
     entry_nom.delete(0, tk.END)
     entry_prenom.delete(0, tk.END)
     entry_age.delete(0, tk.END)
-    entry_sex.set('')
-    symptome1.set('')
-    symptome2.set('')
-    symptome3.set('')
+    entry_sex.set("")
+    symptome1.set("")
+    symptome2.set("")
+    symptome3.set("")
 
 
 def build_admin_button(parent):
@@ -172,10 +195,13 @@ def build_admin_button(parent):
     :param parent: Conteneur parent (fenêtre principale)
     """
     frame = tk.Frame(parent)
-    frame.pack(fill='both', expand=True)
+    frame.pack(fill="both", expand=True)
 
-    admin_button = tk.Button(frame, text="Admin 🔒", bootstyle="dark", command=open_admin_win)
+    admin_button = tk.Button(
+        frame, text="Admin 🔒", bootstyle="dark", command=open_admin_win
+    )
     admin_button.pack(side="bottom", anchor="e", padx=5, pady=5)
+
 
 def build_consent_message(parent):
     """
@@ -184,20 +210,25 @@ def build_consent_message(parent):
     frame = tk.Frame(parent)
     frame.pack()
 
-    lbl = tk.Label(frame,text="En cliquant sur Envoyer, vous acceptez la collecte de donnée")
+    lbl = tk.Label(
+        frame, text="En cliquant sur Envoyer, vous acceptez la collecte de donnée"
+    )
     lbl.pack()
+
 
 def open_admin_win():
     """
     Ouvre la fenêtre administrateur pour l'accès au CSV déchiffré.
     """
-    global entry_login,entry_password,admin_win
+    global entry_login, entry_password, admin_win
     if admin_win is not None and admin_win.winfo_exists():
-        admin_win.lift() 
+        admin_win.lift()
         return
 
     admin_win = tk.Toplevel()
-    admin_win.protocol("WM_DELETE_WINDOW", lambda: (delete_temp_file(), admin_win.destroy()))
+    admin_win.protocol(
+        "WM_DELETE_WINDOW", lambda: (delete_temp_file(), admin_win.destroy())
+    )
     admin_win.title("Admin panel")
     admin_win.resizable(False, False)
     admin_win.attributes("-topmost", True)
@@ -206,24 +237,29 @@ def open_admin_win():
     frame = tk.Frame(admin_win)
     frame.pack(pady=10)
 
-    lbl = tk.Label(frame, text="Interface administrateur", font=('Calibri', 18, 'bold'))
+    lbl = tk.Label(frame, text="Interface administrateur", font=("Calibri", 18, "bold"))
     lbl.grid(row=0, column=0, columnspan=2, pady=10, sticky="n")
 
-    login_label = tk.Label(frame, text="Identifiant", font=('Calibri', 12))
-    login_label.grid(row=1,column=0,pady=5,padx=5)
+    login_label = tk.Label(frame, text="Identifiant", font=("Calibri", 12))
+    login_label.grid(row=1, column=0, pady=5, padx=5)
     entry_login = tk.Entry(frame)
-    entry_login.grid(row=2,column=0,pady=5,padx=5)
+    entry_login.grid(row=2, column=0, pady=5, padx=5)
 
-    password_label = tk.Label(frame, text="Mot de passe", font=('Calibri', 12))
-    password_label.grid(row=1,column=1,pady=5,padx=5)
+    password_label = tk.Label(frame, text="Mot de passe", font=("Calibri", 12))
+    password_label.grid(row=1, column=1, pady=5, padx=5)
     entry_password = tk.Entry(frame, show="*")
-    entry_password.grid(row=2,column=1,pady=5,padx=5)
+    entry_password.grid(row=2, column=1, pady=5, padx=5)
 
-    login_button = tk.Button(frame, text="Connexion", bootstyle="primary", command=check_user)
-    login_button.grid(row=3, column=0,pady=5,padx=5)
+    login_button = tk.Button(
+        frame, text="Connexion", bootstyle="primary", command=check_user
+    )
+    login_button.grid(row=3, column=0, pady=5, padx=5)
 
-    btn_fermer = tk.Button(frame,text="Fermer",command=two_actions, bootstyle="secondary")
-    btn_fermer.grid(row=3, column=1,pady=5,padx=5)
+    btn_fermer = tk.Button(
+        frame, text="Fermer", command=two_actions, bootstyle="secondary"
+    )
+    btn_fermer.grid(row=3, column=1, pady=5, padx=5)
+
 
 def two_actions():
     """
@@ -231,6 +267,7 @@ def two_actions():
     """
     admin_win.destroy()
     delete_temp_file()
+
 
 def check_user():
     """
@@ -245,9 +282,15 @@ def check_user():
             decrypter_csv("Patients_info_crypte.csv", "Patients_info_decrypte.csv", cle)
             os.startfile("Patients_info_decrypte.csv")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Impossible de décrypter ou d’ouvrir le fichier :\n{e}", parent=admin_win)
+            messagebox.showerror(
+                "Erreur",
+                f"Impossible de décrypter ou d’ouvrir le fichier :\n{e}",
+                parent=admin_win,
+            )
     else:
-        messagebox.showerror("Accès refusé", "Identifiants incorrects.", parent=admin_win)
+        messagebox.showerror(
+            "Accès refusé", "Identifiants incorrects.", parent=admin_win
+        )
 
 
 def send_info():
@@ -274,10 +317,13 @@ def send_info():
     if not age.isdigit():
         messagebox.showerror("Erreur", "Le champ 'Âge' doit être un nombre.")
         return
-        
+
     age_int = int(age)
     if not (0 < age_int <= 123):
-        messagebox.showerror("Erreur", "L'âge doit être compris entre 1 et 123 ans.\nSi tu as plus de 123 ans, pense à t'inscrire au Guinness World Records.")
+        messagebox.showerror(
+            "Erreur",
+            "L'âge doit être compris entre 1 et 123 ans.\nSi tu as plus de 123 ans, pense à t'inscrire au Guinness World Records.",
+        )
         return
 
     if not sexe:
@@ -312,15 +358,21 @@ def show_diagnostic(maladie):
     diag_win.position_center()
 
     frame = tk.Frame(diag_win, padding=20)
-    frame.pack(fill='both', expand=True)
+    frame.pack(fill="both", expand=True)
 
-    label1 = tk.Label(frame,text=f"Diagnostic probable :\n\n{maladie}",font=("Calibri", 14),justify="center",wraplength=400)
+    label1 = tk.Label(
+        frame,
+        text=f"Diagnostic probable :\n\n{maladie}",
+        font=("Calibri", 14),
+        justify="center",
+        wraplength=400,
+    )
     label1.pack(pady=(0, 15))
 
     medicament = "Aucun médicament recommandé"
     with open(resource_path("medicaments.txt"), "r", encoding="utf-8") as f:
         for ligne in f:
-            if '=' in ligne:
+            if "=" in ligne:
                 nom_maladie, medoc = ligne.strip().split("=", 1)
                 if nom_maladie.strip().lower() == maladie.lower():
                     medicament = medoc
@@ -329,14 +381,25 @@ def show_diagnostic(maladie):
     label_med = tk.Label(
         frame,
         text=f"Médicament conseillé :\n\n{medicament}",
-        font=("Calibri", 14,),
+        font=(
+            "Calibri",
+            14,
+        ),
         justify="center",
-        wraplength=400
+        wraplength=400,
     )
     label_med.pack(pady=(0, 15))
 
-    label2 = tk.Label(frame,text="⚠️ ATTENTION ⚠️ \n Ceci est un diagnostic approximatif, il ne remplace pas la consultation d'un médecin.",font=("Calibri", 14),justify="center",wraplength=400)
+    label2 = tk.Label(
+        frame,
+        text="⚠️ ATTENTION ⚠️ \n Ceci est un diagnostic approximatif, il ne remplace pas la consultation d'un médecin.",
+        font=("Calibri", 14),
+        justify="center",
+        wraplength=400,
+    )
     label2.pack(pady=(0, 10))
 
-    btn_fermer = tk.Button(frame,text="Fermer",command=diag_win.destroy, bootstyle="secondary")
+    btn_fermer = tk.Button(
+        frame, text="Fermer", command=diag_win.destroy, bootstyle="secondary"
+    )
     btn_fermer.pack()
