@@ -330,7 +330,13 @@ def send_info():
         messagebox.showerror("Erreur", "Le champ 'Sexe' est obligatoire.")
         return
     if not s1:
-        messagebox.showerror("Erreur", "Veuillez sélectionner au moins un symptôme.")
+        messagebox.showerror("Erreur", "Veuillez sélectionner le symptôme 1.")
+        return
+    if not s2:
+        messagebox.showerror("Erreur", "Veuillez sélectionner le symptôme 2.")
+        return
+    if not s3:
+        messagebox.showerror("Erreur", "Veuillez sélectionner le symptôme 3.")
         return
 
     maladie = determine_disease([s1, s2, s3])
